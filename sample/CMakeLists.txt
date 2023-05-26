@@ -91,10 +91,14 @@ target_compile_options(testxml PUBLIC ${MUJOCO_SAMPLE_COMPILE_OPTIONS})
 target_link_libraries(testxml Threads::Threads)
 target_link_options(testxml PRIVATE ${MUJOCO_SAMPLE_LINK_OPTIONS})
 
+# new executables                                                                  <-- add new executables here
+
 target_link_libraries(compile mujoco::mujoco)
 target_link_libraries(derivative mujoco::mujoco)
 target_link_libraries(testspeed mujoco::mujoco)
 target_link_libraries(testxml mujoco::mujoco)
+
+# new executables                                                                  <-- add new executables here
 
 # Build samples that require GLFW.
 
@@ -118,6 +122,17 @@ target_link_libraries(
 )
 target_link_options(record PRIVATE ${MUJOCO_SAMPLE_LINK_OPTIONS})
 
+# new executables                                                                  <-- add new executables here
+add_executable(basic_model_sim basic_model_sim.cpp)
+target_compile_options(basic_model_sim PUBLIC ${MUJOCO_SAMPLE_COMPILE_OPTIONS})
+target_link_libraries(
+  basic_model_sim
+  mujoco::mujoco
+  glfw
+  Threads::Threads
+)
+target_link_options(basic_model_sim PRIVATE ${MUJOCO_SAMPLE_LINK_OPTIONS})
+
 if(APPLE AND MUJOCO_BUILD_MACOS_FRAMEWORKS)
   embed_in_bundle(basic simulate)
   embed_in_bundle(compile simulate)
@@ -125,6 +140,7 @@ if(APPLE AND MUJOCO_BUILD_MACOS_FRAMEWORKS)
   embed_in_bundle(record simulate)
   embed_in_bundle(testspeed simulate)
   embed_in_bundle(testxml simulate)
+  embed_in_bundle(basic_model_sim simulate)
 endif()
 
 # Do not install if macOS Bundles are created as RPATH is managed manually there.
@@ -145,6 +161,7 @@ if(_INSTALL_SAMPLES)
     record
     testspeed
     testxml
+    basic_model_sim                                                             # <-- add new executables here
     INSTALL_DIRECTORY
     "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
     LIB_DIRS
@@ -160,6 +177,7 @@ if(_INSTALL_SAMPLES)
             record
             testspeed
             testxml
+            basic_model_sim                                                       # <-- add new executables here
     EXPORT ${PROJECT_NAME}
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT samples
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT samples
